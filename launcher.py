@@ -3,6 +3,7 @@ import config
 
 bot = commands.Bot(command_prefix="!")
 # Botというクラスのインスタンスを生成し，botという名前の変数に格納．
+# "!"はプレフィックス．
 
 @bot.event  # デコレーター．botにready eventが発生したときの処理の定義．ここで定義した処理はBotがDiscord APIサーバに接続詞，Botの動作に必要なデータ取得が完了したときに実行される．
 async def on_ready():   #async def コルーチン関数定義
@@ -34,6 +35,14 @@ async def on_message(message):  # on_message() メッセージ（テキストチ
 
     if "Hello" in message.content:    # "Bot"に反応
         await message.channel.send("Hello, World!")
+
+    await bot.process_commands(message) # @bot.command()によるコマンド定義と，on_message()イベントリスナーの定義を同時に使用する際に必要．
+
+@bot.command()
+async def hello(ctx):   # ctxはコマンドを定義する上で必須の引数．コマンドの実行に関する情報を保持．
+    await ctx.send(f"こんにちは，{ctx.author.name}さん！")
+
+# 以下未テスト．
 
 @bot.event
 async def on_guild_join(guild):
