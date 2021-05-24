@@ -1,8 +1,6 @@
 from discord.ext import commands
 import config
 import asyncio
-import discord
-import datetime
 
 bot = commands.Bot(command_prefix="!")
 # Botというクラスのインスタンスを生成し，botという名前の変数に格納．
@@ -42,51 +40,83 @@ async def on_message(message):  # on_message() メッセージ（テキストチ
     await bot.process_commands(message) # @bot.command()によるコマンド定義と，on_message()イベントリスナーの定義を同時に使用する際に必要．
 
 @bot.command()
-async def morning(ctx):   # ctxはコマンドを定義する上で必須の引数．コマンドの実行に関する情報を保持．
-    await ctx.send(f"おはようございます，{ctx.author.name}さん！")
-    await ctx.send("僕の朝ごはんは鮭おにぎりです！")
-    await ctx.send("鮭おにぎりって美味しいですよね！")
+async def juice(ctx):
+    # 絵文字の表示
+    watermelon ='N{Watermelon}'
+    grapes = 'N{Grapes}'
+    tangerine = 'N{Tangerine}'
+    kiwi = 'N{Kiwifruit}'
+    pineapple = 'N{Pineapple}'
+    strawberry = 'N{Strawberry}'
+    melon = 'N{Melon}'
+    banana = 'N{Banana}'
 
-@bot.command()
-async def now(ctx):
-    #Embed（埋め込みテキスト）インスタンスを生成
-    embed = discord.Embed()
-    #Embedの表示色を指定
-    embed.color = discord.Color.dark_grey()
+    # wait_forに渡すcheck関数
+    def check_reaction(reaction, user):
+        # リアクションの送信userを確認
+        user_ok = (user == ctx.author)
+        # リアクションの種別を確認
+        reaction_ok=(reaction.emoji == watermelon or
+                     reaction.emoji == grapes or
+                     reaction.emoji == tangerine or
+                     reaction.emoji == kiwi or
+                     reaction.emoji == pineapple or
+                     reaction.emoji == strawberry or
+                     reaction.emoji == melon or
+                     reaction.emoji == banana)
+        return user_ok and reaction_ok
 
-    thistime =datetime.datetime.now()
-    tstr = thistime.strftime('%Y/%m/%d/%H:%M')
-    embed.add_field(name="現在時刻",value=tstr)
-    await ctx.send(embed=embed)
-
-@bot.command()
-async def weekday(ctx):
-    #Embed（埋め込みテキスト）インスタンスを生成
-    embed = discord.Embed()
-    #Embedの表示色を指定
-    embed.color = discord.Color.dark_grey()
-
-    thistime =datetime.datetime.now()
-    wday = thistime.weekday()
-
-    if wday == 0:
-        weday = "月曜日"
-    elif wday == 1:
-        weday = "火曜日"
-    elif wday == 2:
-        weday = "水曜日"
-    elif wday == 3:
-        weday = "木曜日"
-    elif wday == 4:
-        weday = "金曜日"
-    elif wday == 5:
-        weday = "土曜日"
+    # message送信
+    await ctx.send(f"こんにちは，{ctx.author.name}さん！")
+    msg = await ctx.send("今日は何のジュースにしますか？")
+    # 送信したメッセージにリアクションを付与
+    await msg.add_reaction(watermelon)
+    await msg.add_reaction(grapes)
+    await msg.add_reaction(tangerine)
+    await msg.add_reaction(kiwi)
+    await msg.add_reaction(pineapple)
+    await msg.add_reaction(strawberry)
+    await msg.add_reaction(melon)
+    await msg.add_reaction(banana)
+    # ユーザからのリアクションを待つ
+    reaction, user = await bot.wait_for("reaction_add", check=check_reaction)
+    # ユーザのリアクションに応じてメッセージを変える
+    if reaction.emoji == watermelon:
+        flavor = "スイカ"
+    elif reaction.emoji == grapes:
+        flavor = "ぶどう"
+    elif reaction.emoji == tangerine:
+        flavor = "みかん"
+    elif reaction.emoji == kiwi:
+        flavor = "キウイ"
+    elif reaction.emoji == pineapple:
+        flavor = "マンゴーパイン"
+    elif reaction.emoji == strawberry:
+        flavor = "イチゴミルク"
+    elif reaction.emoji == melon:
+        flavor = "タカミメロン"
     else:
-        weday = "日曜日"
+        flavor = "バナナミルク"
 
-    embed.add_field(name="本日の曜日",value=weday)
-    await ctx.send(embed=embed)
+    await ctx.send(f"今日のジュースは{flavor}ジュースですね！")
 
+
+@bot.command()
+async def morning(ctx):   # ctxはコマンドを定義する上で必須の引数．コマンドの実行に関する情報を保持．
+    # 待機するメッセージのチェック関数
+    def check_message_author(msg):
+        return msg.author is ctx.author
+
+    await ctx.send(f"おはようございます，{ctx.author.name}さん！")
+    await ctx.send("今日の朝ごはんは何ですか？")
+    # チェック関数に合格するようなメッセージを待つ
+    try:
+        msg = await bot.wait_for('message', check=check_message_author, timeout=10) # 秒数．例外が発生するとexceptへ．
+    except asyncio.TimeoutError:
+        await ctx.send("タイムアウト．")
+        return
+    # 受け取ったメッセージの内容を使って返信
+    await ctx.send(f"今日の朝ごはんは「{msg.content}」なんですね！")
 
 # 以下未テスト．
 
