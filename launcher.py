@@ -21,22 +21,22 @@ async def on_message(message):  # on_message() メッセージ（テキストチ
     if "Bot" in message.content:    # "Bot"に反応
         await message.channel.send("はい，Botです！")
 
-    if "おはよう" in message.content:    # "Bot"に反応
+    if "おはよう" in message.content:
         await message.channel.send("おはよう！")
 
-    if "おやすみ" in message.content:    # "Bot"に反応
+    if "おやすみ" in message.content:
         await message.channel.send("おやすみー！")
 
-    if "はろー" in message.content:    # "Bot"に反応
+    if "はろー" in message.content:
         await message.channel.send("Hello, World!")
 
-    if "ハロー" in message.content:    # "Bot"に反応
+    if "ハロー" in message.content:
         await message.channel.send("Hello, World!")
 
-    if "hello" in message.content:    # "Bot"に反応
+    if "hello" in message.content:
         await message.channel.send("Hello, World!")
 
-    if "Hello" in message.content:    # "Bot"に反応
+    if "Hello" in message.content:
         await message.channel.send("Hello, World!")
 
     await bot.process_commands(message) # @bot.command()によるコマンド定義と，on_message()イベントリスナーの定義を同時に使用する際に必要．
