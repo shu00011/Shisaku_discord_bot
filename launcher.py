@@ -3,11 +3,18 @@ import config
 import asyncio
 import discord
 import datetime
+import random
 
 client = discord.Client()   # Discordサーバとの接続やBot自身に関する機能を持つクラス．BotクラスはClientクラスを継承するため，Clientとして扱える．
 bot = commands.Bot(command_prefix="!")
 # Botというクラスのインスタンスを生成し，botという名前の変数に格納．
 # "!"はプレフィックス．
+
+random_contents=[
+    "鮭ごはん",
+    "鮭おにぎり",
+    "鮭茶漬け"
+]
 
 @bot.event  # デコレーター．botにready eventが発生したときの処理の定義．ここで定義した処理はBotがDiscord APIサーバに接続詞，Botの動作に必要なデータ取得が完了したときに実行される．
 async def on_ready():   #async def コルーチン関数定義
@@ -44,9 +51,10 @@ async def on_message(message):  # on_message() メッセージ（テキストチ
 
 @bot.command()
 async def morning(ctx):   # ctxはコマンドを定義する上で必須の引数．コマンドの実行に関する情報を保持．
+    content=random.choice(random_contents)
     await ctx.send(f"おはようございます，{ctx.author.name}さん！")
-    await ctx.send("僕の朝ごはんは鮭おにぎりです！")
-    await ctx.send("鮭おにぎりって美味しいですよね！")
+    await ctx.send(f"僕の朝ごはんは{content}です！")
+    await ctx.send(f"{content}って美味しいですよね！")
 
 @bot.command()
 async def now(ctx):
