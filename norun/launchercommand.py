@@ -118,6 +118,31 @@ async def morning(ctx):   # ctxはコマンドを定義する上で必須の引�
     # 受け取ったメッセージの内容を使って返信
     await ctx.send(f"今日の朝ごはんは「{msg.content}」なんですね！")
 
+@bot.command()
+async def guild_info(ctx):
+    guild = ctx.guild   # guildインスタンスの取得
+    await ctx.send(
+        f"サーバ名：{guild.name}\n"
+        f"サーバID：{guild.id}\n"
+        f"サーバオーナー：{guild.owner.name}\n"
+        f"メンバー数：{guild.member_count}\n"
+        f"作成日：{guild.created_at+datetime.timedelta(hours=9)}\n"
+    )
+
+@bot.command()
+async def guild_create_channel(ctx, name):
+    guild = ctx.guild
+    await guild.create_text_channel(name=name)
+    await ctx.send(f"テキストチャンネル{name}を作成しました．")
+
+@bot.command()  # 反応はしたが取得できず．
+async def mobile(ctx):
+    member = ctx.author
+    await ctx.send(
+        f"status:{str(member.status)}\n"
+        f"mobileからのログインか？:{member.is_on_mobile()}"
+    )
+
 # 以下未テスト．
 
 @bot.event
@@ -129,7 +154,7 @@ async def on_guild_join(guild):
 async def on_member_join(member):
     # Guildメンバーが増えたら挨拶DMを送信．
     # memberのDM受け取り設定によっては失敗する．
-    await member.channnel.send(
+    await member.channel.send(
         f"{member.name}さん，サーバー「{member.guild.name}」にようこそ！\n"
         f"僕は「{bot.user.name}です！よろしくね！"
     )

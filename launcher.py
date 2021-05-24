@@ -4,6 +4,7 @@ import asyncio
 import discord
 import datetime
 
+client = discord.Client()   # Discordサーバとの接続やBot自身に関する機能を持つクラス．BotクラスはClientクラスを継承するため，Clientとして扱える．
 bot = commands.Bot(command_prefix="!")
 # Botというクラスのインスタンスを生成し，botという名前の変数に格納．
 # "!"はプレフィックス．
@@ -87,6 +88,54 @@ async def weekday(ctx):
     embed.add_field(name="本日の曜日",value=weday)
     await ctx.send(embed=embed)
 
+@bot.command()
+async def DM(ctx, member: discord.Member, content):
+    #Embed（埋め込みテキスト）インスタンスを生成
+    embed = discord.Embed()
+    #Embedの表示色を指定
+    embed.color = discord.Color.dark_grey()
+
+    embed.add_field(name=f"{member.name}にDMを送信．",value="成功．")
+    await ctx.send(embed=embed)
+    await member.send(content=content)
+
+@bot.command()
+async def client_play(ctx, title):
+    client = bot
+    game = discord.Game(name=title)
+
+    #Embed（埋め込みテキスト）インスタンスを生成
+    embed = discord.Embed()
+    #Embedの表示色を指定
+    embed.color = discord.Color.dark_grey()
+
+    embed.add_field(name=f"試作botがプレイしているのは",value=title)
+    await ctx.send(embed=embed)
+
+    await client.change_presence(activity=game)
+
+@bot.command()
+async def typing(ctx):
+    embed = discord.Embed()
+    #Embedの表示色を指定
+    embed.color = discord.Color.dark_grey()
+
+    embed.add_field(name="typing now",value="...")
+    await ctx.send(embed=embed)
+    async with ctx.channel.typing():
+        # 長い処理の代わりにsleepする
+        await asyncio.sleep(3)
+
+@bot.command()
+async def invite(ctx):
+    # 24時間有効，10人まで招待かのうな招待を作成
+    channel = ctx.channel
+    invite = await channel.create_invite(max_age=3600 * 24, max_users=10)
+    await ctx.send(invite.url)
+
+@bot.command()
+async def icon(ctx):
+    await ctx.send(file=discord.File(fp="icon.JPG"))
 
 # 以下未テスト．
 
@@ -99,7 +148,7 @@ async def on_guild_join(guild):
 async def on_member_join(member):
     # Guildメンバーが増えたら挨拶DMを送信．
     # memberのDM受け取り設定によっては失敗する．
-    await member.channnel.send(
+    await member.channel.send(
         f"{member.name}さん，サーバー「{member.guild.name}」にようこそ！\n"
         f"僕は「{bot.user.name}です！よろしくね！"
     )
