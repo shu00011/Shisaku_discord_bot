@@ -1,4 +1,4 @@
-# dicrordBot
+# 試作bot(discord bot)
 
 # 環境
 
