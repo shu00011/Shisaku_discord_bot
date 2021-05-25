@@ -9,3 +9,5 @@
 
 * Pythonの仮想環境venvを有効にする．(source .venv/Scripts/activate)
 * Python launcher.py
+* ctrl+C
+* deactivate
