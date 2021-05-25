@@ -11,3 +11,7 @@
 * Python launcher.py
 * ctrl+C
 * deactivate
+
+# 実装済みの機能
+
+![help_b](help_b.PNG "help_b")
