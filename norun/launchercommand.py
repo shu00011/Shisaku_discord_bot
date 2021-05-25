@@ -143,6 +143,14 @@ async def mobile(ctx):
         f"mobileからのログインか？:{member.is_on_mobile()}"
     )
 
+@DM.error
+async def DM(self, ctx, error):
+    if isinstance(error, commands.errors.BadArgument):
+        await ctx.send("パラメータの形式が異なります．\n正しい文法：!DM <memberName> <text>")
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        await ctx.send("パラメータの数が足りません．\n正しい文法：!DM <memberName> <text>")
+
+
 # 以下未テスト．
 
 @bot.event
