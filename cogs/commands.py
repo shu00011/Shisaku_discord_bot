@@ -63,7 +63,7 @@ class Commands(commands.Cog):
         embed = discord.Embed()
         embed.color = discord.Color.dark_grey()
 
-        embed.add_field(name=f"試作botがプレイしているのは",value=title)
+        embed.add_field(name="試作botがプレイしているのは",value=title)
         await ctx.send(embed=embed)
 
         await client.change_presence(activity=game)
