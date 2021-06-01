@@ -11,8 +11,8 @@ class Commands(commands.Cog):
     @commands.command()
     async def morning(self,ctx):
         random_contents=[
-            "鮭ごはん",
-            "鮭おにぎり",
+            "しろごはん",
+            "ぎんしゃり",
             "鮭茶漬け"
         ]
         content=random.choice(random_contents)
