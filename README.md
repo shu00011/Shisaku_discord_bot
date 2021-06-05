@@ -3,7 +3,7 @@
 # 環境
 
 * Windows 10 Home
-* Python3.9.1
+* Python3.9.5
 
 # 起動方法（製作者のみ）
 
